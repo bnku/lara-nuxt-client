@@ -1,0 +1,5 @@
+/node_modules
+.nuxt
+/dist
+/public/_nuxt
+*.code-workspace
