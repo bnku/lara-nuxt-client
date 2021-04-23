@@ -1,10 +1,10 @@
 <template>
-  <div class="card">
-    <div v-if="title" class="card-header">
+  <div class="panel is-primary" :class="{ form: form }">
+    <p v-if="title" class="panel-heading">
       {{ title }}
-    </div>
+    </p>
 
-    <div class="card-body">
+    <div class="panel-block">
       <slot />
     </div>
   </div>
@@ -12,10 +12,18 @@
 
 <script>
 export default {
-  name: 'Card',
+  name: "Card",
 
   props: {
-    title: { type: String, default: null }
-  }
-}
+    title: { type: String, default: null },
+    form: { type: Boolean, default: false },
+  },
+};
 </script>
+
+<style lang="scss" scoped>
+.form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+</style>

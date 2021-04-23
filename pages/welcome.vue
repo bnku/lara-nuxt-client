@@ -1,52 +1,39 @@
 <template>
-  <div>
-    <div class="top-right links">
-      <template v-if="authenticated">
-        <router-link :to="{ name: 'home' }">
-          Home
-        </router-link>
-      </template>
-      <template v-else>
-        <router-link :to="{ name: 'login' }">
-          Log In
-        </router-link>
-        <router-link :to="{ name: 'register' }">
-          Register
-        </router-link>
-      </template>
-    </div>
+  <div class="hero is-medium">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <p class="title"><span class="laravel">Laravel</span><span class="nuxt">Nuxt</span></p>
 
-    <div class="text-center">
-      <div class="title mb-4">
-        <span class="laravel">Laravel</span><span class="nuxt">Nuxt</span>
-        <!-- {{ title }} -->
-      </div>
-
-      <div class="links">
-        <a href="https://github.com/cretueusebiu/laravel-nuxt">github.com/cretueusebiu/laravel-nuxt</a>
+        <p class="subtitle">Lara-Nuxt + Buefy</p>
+        <div class="is-flex is-justify-content-center is-align-items-center">
+          <b-icon pack="fab" icon="github" />
+          <a href="https://github.com/bnku/lara-nuxt-client" target="_blank">bnku/lara-nuxt-client</a>
+        </div>
+        <div class="is-flex is-justify-content-center is-align-items-center">
+          <b-icon pack="fab" icon="github" />
+          <a href="https://github.com/cretueusebiu/laravel-nuxt" target="_blank">cretueusebiu/laravel-nuxt</a>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
-  layout: 'simple',
-
   data: () => ({
-    title: process.env.appName
+    title: process.env.appName,
   }),
 
-  head () {
-    return { title: "Home" }
+  head() {
+    return { title: "Home" };
   },
 
   computed: mapGetters({
-    authenticated: 'auth/check'
-  })
-}
+    authenticated: "auth/check",
+  }),
+};
 </script>
 
 <style scoped>

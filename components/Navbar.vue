@@ -1,96 +1,91 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-white">
-    <div class="container">
-      <router-link :to="{ name: user ? 'home' : 'welcome' }" class="navbar-brand">
-        {{ appName }}
-      </router-link>
+  <b-navbar spaced>
+    <template #brand>
+      <b-navbar-item tag="router-link" :to="{ name: 'welcome' }">
+        <h1 class="logo title is-3">{{ appName }}</h1>
+      </b-navbar-item>
+    </template>
+    <template #start>
+      <b-navbar-item tag="router-link" :to="{ path: '/home' }" v-if="user">
+        Home
+      </b-navbar-item>
+    </template>
 
-      <button aria-label="Toggle navigation" class="navbar-toggler" type="button"
-              data-toggle="collapse" data-target="#navbarToggler"
-              aria-controls="navbarToggler" aria-expanded="false"
-      >
-        <span class="navbar-toggler-icon" />
-      </button>
-
-      <div id="navbarToggler" class="collapse navbar-collapse">
-        <ul class="navbar-nav">
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li> -->
-        </ul>
-
-        <ul class="navbar-nav ml-auto">
-          <!-- Authenticated -->
-          <li v-if="user" class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-dark"
-               href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-            >
-              <img :src="user.photo_url" class="rounded-circle profile-photo mr-1">
-              {{ user.name }}
-            </a>
-            <div class="dropdown-menu">
-              <router-link :to="{ name: 'settings.profile' }" class="dropdown-item pl-3">
-                <fa icon="cog" fixed-width />
-                Settings
-              </router-link>
-
-              <div class="dropdown-divider" />
-              <a class="dropdown-item pl-3" href="#" @click.prevent="logout">
-                <fa icon="sign-out-alt" fixed-width />
-                Logout
-              </a>
-            </div>
-          </li>
-          <!-- Guest -->
-          <template v-else>
-            <li class="nav-item">
-              <router-link :to="{ name: 'login' }" class="nav-link" active-class="active">
-                Log In
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link :to="{ name: 'register' }" class="nav-link" active-class="active">
-                Register
-              </router-link>
-            </li>
-          </template>
-        </ul>
-      </div>
-    </div>
-  </nav>
+    <template #end v-if="user">
+      <b-navbar-dropdown hoverable right :collapsible="false" class="usermenu">
+        <template #label>
+          <img :src="user.photo_url" class="avatar" />
+          <span>{{ user.name }}</span>
+        </template>
+        <b-navbar-item tag="router-link" :to="{ name: 'settings.profile' }">
+          <b-icon icon="cog" />
+          Settings
+        </b-navbar-item>
+        <b-navbar-item @click.prevent="logout">
+          <b-icon icon="sign-out-alt" />
+          Logout
+        </b-navbar-item>
+      </b-navbar-dropdown>
+    </template>
+    <template #end v-else>
+      <b-navbar-item tag="div">
+        <div class="buttons">
+          <router-link :to="{ name: 'register' }" class="button is-light">
+            Register
+          </router-link>
+          <router-link :to="{ name: 'login' }" class="button is-primary">
+            Log In
+          </router-link>
+        </div>
+      </b-navbar-item>
+    </template>
+  </b-navbar>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
-  components: {
-  },
+  components: {},
 
   data: () => ({
-    appName: process.env.appName
+    appName: process.env.appName,
   }),
 
   computed: mapGetters({
-    user: 'auth/user'
+    user: "auth/user",
   }),
 
   methods: {
-    async logout () {
+    async logout() {
       // Log out the user.
-      await this.$store.dispatch('auth/logout')
+      await this.$store.dispatch("auth/logout");
 
       // Redirect to login.
-      this.$router.push({ name: 'login' })
-    }
-  }
-}
+      this.$router.push({ name: "login" });
+    },
+  },
+};
 </script>
 
-<style scoped>
-.profile-photo {
-  width: 2rem;
-  height: 2rem;
-  margin: -.375rem 0;
+<style lang="scss" scoped>
+.logo {
+  background: linear-gradient(to right, #48289e, #7957d5);
+  color: transparent;
+  background-clip: text;
+}
+.avatar {
+  margin-right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+.usermenu {
+  ::v-deep.navbar-link {
+    display: flex;
+  }
+  .icon {
+    margin-right: 5px;
+  }
 }
 </style>

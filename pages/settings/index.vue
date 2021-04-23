@@ -1,47 +1,54 @@
 <template>
-  <div class="row">
-    <div class="col-md-3">
-      <card title="Settings" class="settings-card">
-        <ul class="nav flex-column nav-pills">
-          <li v-for="tab in tabs" :key="tab.route" class="nav-item">
-            <router-link :to="{ name: tab.route }" class="nav-link" active-class="active">
-              <fa :icon="tab.icon" fixed-width />
-              {{ tab.name }}
-            </router-link>
-          </li>
-        </ul>
-      </card>
-    </div>
-
-    <div class="col-md-9">
-      <transition name="fade" mode="out-in">
-        <router-view />
-      </transition>
-    </div>
+  <div>
+    <b-tabs vertical v-model="tab">
+      <b-tab-item :label="tab.name" v-for="tab in tabs" :key="tab.route">
+        <template #header>
+          <b-navbar-item tag="span" :to="{ name: tab.route }">
+            <b-icon :icon="tab.icon"></b-icon>
+            {{ tab.name }}
+          </b-navbar-item>
+        </template>
+        <transition name="fade" mode="out-in">
+          <router-view />
+        </transition>
+      </b-tab-item>
+    </b-tabs>
   </div>
 </template>
 
 <script>
 export default {
-  middleware: 'auth',
+  middleware: "auth",
+
+  data() {
+    return {
+      tab: 0,
+    };
+  },
+
+  watch: {
+    tab() {
+      this.$router.push({ name: this.tabs[this.tab].route });
+    },
+  },
 
   computed: {
-    tabs () {
+    tabs() {
       return [
         {
-          icon: 'user',
+          icon: "user",
           name: "Profile",
-          route: 'settings.profile'
+          route: "settings.profile",
         },
         {
-          icon: 'lock',
+          icon: "key",
           name: "Password",
-          route: 'settings.password'
-        }
-      ]
-    }
-  }
-}
+          route: "settings.password",
+        },
+      ];
+    },
+  },
+};
 </script>
 
 <style>

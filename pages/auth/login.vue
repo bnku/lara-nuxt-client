@@ -1,99 +1,93 @@
 <template>
-  <div class="row">
-    <div class="col-lg-8 m-auto">
-      <card title="Log In">
-        <form @submit.prevent="login" @keydown="form.onKeydown($event)">
-          <!-- Email -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">Email</label>
-            <div class="col-md-7">
-              <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email" name="email" class="form-control">
-              <has-error :form="form" field="email" />
-            </div>
-          </div>
+  <card title="Log In" class="my-6" form>
+    <form @submit.prevent="login" @keydown="form.onKeydown($event)" class="container my-4 mx-1">
+      <!-- Email -->
+      <b-field
+        :type="{ 'is-danger': form.errors.has('email') }"
+        :message="form.errors.has('email') ? form.errors.errors.email[0] : ''"
+      >
+        <b-input placeholder="Email" required v-model="form.email" type="email" icon="envelope" size="is-medium" />
+      </b-field>
 
-          <!-- Password -->
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label text-md-right">Password</label>
-            <div class="col-md-7">
-              <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" type="password" name="password" class="form-control">
-              <has-error :form="form" field="password" />
-            </div>
-          </div>
+      <!-- Password -->
+      <b-field
+        :type="{ 'is-danger': form.errors.has('password') }"
+        :message="form.errors.has('password') ? form.errors.errors.password[0] : ''"
+      >
+        <b-input
+          placeholder="Password"
+          required
+          v-model="form.password"
+          type="password"
+          icon="key"
+          size="is-medium"
+          password-reveal
+        />
+      </b-field>
 
-          <!-- Remember Me -->
-          <div class="form-group row">
-            <div class="col-md-3" />
-            <div class="col-md-7 d-flex">
-              <checkbox v-model="remember" name="remember">
-                Remember me
-              </checkbox>
+      <!-- Remember Me -->
+      <b-field grouped class="my-5">
+        <b-field expanded>
+          <b-checkbox v-model="remember" expanded>Remember me</b-checkbox>
+        </b-field>
 
-              <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto">
-                Forgot password
-              </router-link>
-            </div>
-          </div>
+        <router-link :to="{ name: 'password.request' }" class="is-justify-self-flex-end">
+          Forgot password
+        </router-link>
+      </b-field>
 
-          <div class="form-group row">
-            <div class="col-md-7 offset-md-3 d-flex">
-              <!-- Submit Button -->
-              <v-button :loading="form.busy">
-                Log In
-              </v-button>
-
-              <!-- GitHub Login Button -->
-              <login-with-github />
-            </div>
-          </div>
-        </form>
-      </card>
-    </div>
-  </div>
+      <b-field grouped>
+        <b-button @click="login" :loading="form.busy" expanded class="is-primary mr-2">
+          Log In
+        </b-button>
+        <login-with-github expanded />
+      </b-field>
+    </form>
+  </card>
 </template>
 
 <script>
-import Form from 'vform'
+import Form from "vform";
 
 export default {
-  middleware: 'guest',
+  middleware: "guest",
 
   data: () => ({
     form: new Form({
-      email: '',
-      password: ''
+      email: "",
+      password: "",
     }),
-    remember: false
+    remember: false,
   }),
 
-  head () {
-    return { title: "Log In" }
+  head() {
+    return { title: "Log In" };
   },
 
   methods: {
-    async login () {
-      let data
+    async login() {
+      let data;
 
       // Submit the form.
       try {
-        const response = await this.form.post('/login')
-        data = response.data
+        const response = await this.form.post("/login");
+        data = response.data;
       } catch (e) {
-        return
+        return;
       }
 
       // Save the token.
-      this.$store.dispatch('auth/saveToken', {
+      this.$store.dispatch("auth/saveToken", {
         token: data.token,
-        remember: this.remember
-      })
+        remember: this.remember,
+      });
 
       // Fetch the user.
-      await this.$store.dispatch('auth/fetchUser')
+      await this.$store.dispatch("auth/fetchUser");
 
       // Redirect home.
-      this.$router.push({ name: 'home' })
-    }
-  }
-}
+      this.$router.push({ name: "home" });
+    },
+  },
+};
 </script>

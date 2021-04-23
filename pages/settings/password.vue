@@ -1,61 +1,77 @@
 <template>
   <card title="Your Password">
-    <form @submit.prevent="update" @keydown="form.onKeydown($event)">
-      <alert-success :form="form" message="Your password has been updated!" />
+    <form @submit.prevent="update" @keydown="form.onKeydown($event)" class="my-4 mx-1">
+      <!-- <alert-success :form="form" message="Your password has been updated!" /> -->
+      <b-notification v-if="status" type="is-success" aria-close-label="Close notification">
+        Your password has been updated!
+      </b-notification>
 
       <!-- Password -->
-      <div class="form-group row">
-        <label class="col-md-3 col-form-label text-md-right">New Password</label>
-        <div class="col-md-7">
-          <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" type="password" name="password" class="form-control">
-          <has-error :form="form" field="password" />
-        </div>
-      </div>
+      <b-field
+        :type="{ 'is-danger': form.errors.has('password') }"
+        :message="form.errors.has('password') ? form.errors.errors.password[0] : ''"
+      >
+        <b-input
+          placeholder="Password"
+          required
+          v-model="form.password"
+          type="password"
+          icon="key"
+          size="is-medium"
+          password-reveal
+        />
+      </b-field>
 
       <!-- Password Confirmation -->
-      <div class="form-group row">
-        <label class="col-md-3 col-form-label text-md-right">Confirm Password</label>
-        <div class="col-md-7">
-          <input v-model="form.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" type="password" name="password_confirmation" class="form-control">
-          <has-error :form="form" field="password_confirmation" />
-        </div>
-      </div>
+      <b-field
+        :type="{ 'is-danger': form.errors.has('password_confirmation') }"
+        :message="form.errors.has('password_confirmation') ? form.errors.errors.password_confirmation[0] : ''"
+      >
+        <b-input
+          placeholder="Confirm Password"
+          required
+          v-model="form.password_confirmation"
+          type="password"
+          icon="key"
+          size="is-medium"
+          password-reveal
+        />
+      </b-field>
 
       <!-- Submit Button -->
-      <div class="form-group row">
-        <div class="col-md-9 ml-md-auto">
-          <v-button :loading="form.busy" type="success">
-            Update
-          </v-button>
-        </div>
-      </div>
+
+      <b-button @click="update" :loading="form.busy" class="is-primary mr-2">
+        Update
+      </b-button>
     </form>
   </card>
 </template>
 
 <script>
-import Form from 'vform'
+import Form from "vform";
 
 export default {
   scrollToTop: false,
 
   data: () => ({
     form: new Form({
-      password: '',
-      password_confirmation: ''
-    })
+      password: "",
+      password_confirmation: "",
+    }),
+    status: "",
   }),
 
-  head () {
-    return { title: "Settings" }
+  head() {
+    return { title: "Settings" };
   },
 
   methods: {
-    update () {
-      this.form.patch('/settings/password').then(() => {
-        this.form.reset()
-      })
-    }
-  }
-}
+    update() {
+      this.form.patch("/settings/password").then((data) => {
+        this.status = data.status == 200;
+        this.form.reset();
+      });
+    },
+  },
+};
 </script>

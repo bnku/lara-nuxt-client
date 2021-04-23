@@ -30,22 +30,22 @@ export default ({ app, store, redirect }) => {
     if (status >= 500) {
       Swal.fire({
         icon: 'error',
-        title: app.i18n.t('error_alert_title'),
-        text: app.i18n.t('error_alert_text'),
+        title: 'Oops...',
+        text: 'Something went wrong! Please try again.',
         reverseButtons: true,
-        confirmButtonText: app.i18n.t('ok'),
-        cancelButtonText: app.i18n.t('cancel')
+        confirmButtonText: 'Ok',
+        cancelButtonText: 'Cancel'
       })
     }
 
     if (status === 401 && store.getters['auth/check']) {
       Swal.fire({
         icon: 'warning',
-        title: app.i18n.t('token_expired_alert_title'),
-        text: app.i18n.t('token_expired_alert_text'),
+        title: 'Session Expired!',
+        text: 'Please log in again to continue.',
         reverseButtons: true,
-        confirmButtonText: app.i18n.t('ok'),
-        cancelButtonText: app.i18n.t('cancel')
+        confirmButtonText: 'Ok',
+        cancelButtonText: 'Cancel'
       }).then(() => {
         store.commit('auth/LOGOUT')
 
