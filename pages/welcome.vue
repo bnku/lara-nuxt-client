@@ -4,7 +4,7 @@
       <div class="container has-text-centered">
         <p class="title"><span class="laravel">Laravel</span><span class="nuxt">Nuxt</span></p>
 
-        <p class="subtitle">Lara-Nuxt + Buefy</p>
+        <p class="subtitle">Laravel-Nuxt + Buefy</p>
         <div class="is-flex is-justify-content-center is-align-items-center">
           <b-icon pack="fab" icon="github" />
           <a href="https://github.com/bnku/lara-nuxt-client" target="_blank">bnku/lara-nuxt-client</a>
